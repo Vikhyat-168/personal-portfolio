@@ -103,35 +103,59 @@ document.querySelectorAll(".project-tags .tag").forEach((tag) => {
   });
 });
 
-const randomColorElements = document.querySelectorAll(
-  ".line, .hero-role, .project",
-);
+const lineColors = [
+  "rgb(189, 123, 36)",
+  "rgb(93, 173, 226)",
+  "rgb(88, 214, 141)",
+  "rgb(240, 98, 146)",
+  "rgb(175, 122, 197)",
+  "rgb(241, 196, 15)",
+];
 
 function randomizeColors() {
-  randomColorElements.forEach((el) => {
+  // handle hero-role independently
+  document.querySelectorAll(".hero-role").forEach((el) => {
+    const color = lineColors[Math.floor(Math.random() * lineColors.length)];
+    el.style.color = color;
+    el.style.textShadow = `0 0 8px ${color}, 0 0 20px ${color}`;
+  });
+
+  // handle each project + its following line as a matched pair
+  document.querySelectorAll(".project").forEach((project) => {
     const color = lineColors[Math.floor(Math.random() * lineColors.length)];
     const rgbaColor = color.replace("rgb", "rgba");
 
-    if (el.classList.contains("line")) {
-      el.style.backgroundColor = color;
-      el.style.boxShadow = `0 0 5px ${color}, 0 0 15px ${color}, 0 0 30px ${rgbaColor.replace(")", ", 0.6)")}`;
-    } else if (el.classList.contains("project")) {
-      el.style.setProperty("--project-glow", color);
-      el.style.setProperty(
-        "--project-glow-soft",
-        rgbaColor.replace(")", ", 0.5)"),
-      );
-      el.style.setProperty(
-        "--project-glow-softer",
-        rgbaColor.replace(")", ", 0.3)"),
-      );
-      el.style.setProperty(
-        "--project-glow-faint",
-        rgbaColor.replace(")", ", 0.15)"),
-      );
-    } else {
-      el.style.color = color;
-      el.style.textShadow = `0 0 8px ${color}, 0 0 20px ${color}`;
+    project.style.setProperty("--project-glow", color);
+    project.style.setProperty(
+      "--project-glow-soft",
+      rgbaColor.replace(")", ", 0.5)"),
+    );
+    project.style.setProperty(
+      "--project-glow-softer",
+      rgbaColor.replace(")", ", 0.3)"),
+    );
+    project.style.setProperty(
+      "--project-glow-faint",
+      rgbaColor.replace(")", ", 0.15)"),
+    );
+
+    const nextLine = project.nextElementSibling;
+    if (nextLine && nextLine.classList.contains("line")) {
+      nextLine.style.backgroundColor = color;
+      nextLine.style.boxShadow = `0 0 5px ${color}, 0 0 15px ${color}, 0 0 30px ${rgbaColor.replace(")", ", 0.6)")}`;
+    }
+  });
+
+  // handle any other standalone .line elements not tied to a project
+  document.querySelectorAll(".line").forEach((line) => {
+    const isProjectLine =
+      line.previousElementSibling &&
+      line.previousElementSibling.classList.contains("project");
+    if (!isProjectLine) {
+      const color = lineColors[Math.floor(Math.random() * lineColors.length)];
+      const rgbaColor = color.replace("rgb", "rgba");
+      line.style.backgroundColor = color;
+      line.style.boxShadow = `0 0 5px ${color}, 0 0 15px ${color}, 0 0 30px ${rgbaColor.replace(")", ", 0.6)")}`;
     }
   });
 }
