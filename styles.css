@@ -330,10 +330,12 @@ border-color:var(--border-hover);
   border-color: #666;
 }
 
+
+
 .project-number{
   position: absolute;
-  top: 0px;
-  left: 0px;
+  right: 20px;
+  bottom: 20px;
   font-size: clamp(7rem, 18vw, 12rem);
   font-weight: 800;
   color: #1a1a1a;
